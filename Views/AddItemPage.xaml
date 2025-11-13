@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoppingList.Views.AddItemPage"
+             Title="Dodaj Element Listy">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Entry x:Name="Name" Placeholder="Nazwa przedmiotu" />
+        <HorizontalStackLayout Spacing="10">
+            <Entry x:Name="Amount" Placeholder="Ilość" Keyboard="Numeric" />
+            <Picker x:Name="Unit" HeightRequest="20">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>mg</x:String>
+                        <x:String>g</x:String>
+                        <x:String>kg</x:String>
+                        <x:String>ml</x:String>
+                        <x:String>l</x:String>
+                        <x:String>szt</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </HorizontalStackLayout>
+        <Label Text="Wybierz kategorię:" />
+        <Picker x:Name="Category" HeightRequest="20">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Mleczne</x:String>
+                    <x:String>Owoce</x:String>
+                    <x:String>Warzywa</x:String>
+                    <x:String>Mięso</x:String>
+                    <x:String>Picie</x:String>
+                    <x:String>Inne</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+        <Button Text="Dodaj Produkt" Clicked="OnConfirm" />
+    </VerticalStackLayout>
+</ContentPage>
