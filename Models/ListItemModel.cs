@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ShoppingList.Models
 {
-    public class ListItemModel
+    public partial class ListItemModel : ObservableObject
     {
+        [ObservableProperty]
+        private bool isBought;
+
         private String _name;
         public String Name
         {

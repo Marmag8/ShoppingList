@@ -21,28 +21,50 @@
 
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Items}"
-                        SelectionMode="None"
-                        VerticalOptions="FillAndExpand">
+                        SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ListItemModel">
-                    <Frame x:Name="Item" Margin="5" Padding="10" CornerRadius="6">
+                    <Border x:Name="Item" Margin="5" Padding="10">
                         <FlyoutBase.ContextFlyout>
                             <MenuFlyout BindingContext="{Binding Source={x:Reference Item}, Path=BindingContext}">
                                 <MenuFlyoutItem Text="Usuń"
-                                                Clicked="OnDeleteClicked"
-                                                CommandParameter="{Binding .}" />
+                                                Clicked="ContextMenuHandler"
+                                                CommandParameter="{Binding .}" 
+                                                StyleId="Delete" />
+                                <MenuFlyoutItem Text="Oznacz jako kupione"
+                                                Clicked="ContextMenuHandler"
+                                                CommandParameter="{Binding .}" 
+                                                StyleId="MarkAsBought" />
                             </MenuFlyout>
                         </FlyoutBase.ContextFlyout>
 
                         <VerticalStackLayout Spacing="6">
-                            <Label Text="{Binding Name}" FontSize="18" />
+                            <Label x:Name="ItemName" Text="{Binding Name}" FontSize="18">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
+                                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="False">
+                                        <Setter Property="TextDecorations" Value="None" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
                             <HorizontalStackLayout Spacing="0">
                                 <Label Text="{Binding Amount, StringFormat='Ilosc: {0}'}" />
                                 <Label Text="{Binding Unit, StringFormat='{0}'}" />
                             </HorizontalStackLayout>
                             <Label Text="{Binding Category, StringFormat='Kategoria: {0}'}" />
                         </VerticalStackLayout>
-                    </Frame>
+
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsBought}" Value="True">
+                                <Setter Property="Opacity" Value="0.7" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsBought}" Value="False">
+                                <Setter Property="Opacity" Value="1" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

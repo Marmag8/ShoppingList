@@ -36,7 +36,23 @@ namespace ShoppingList.Views
             await Navigation.PushModalAsync(addItemPage);
         }
 
-        private void OnDeleteClicked(object sender, EventArgs e)
+        private void ContextMenuHandler(object sender, EventArgs e)
+        {
+            if (sender is not MenuFlyoutItem menuItem)
+                return;
+
+            switch (menuItem.StyleId)
+            {
+                case "Delete":
+                    Delete(menuItem);
+                    break;
+                case "MarkAsBought":
+                    MarkAsBought(menuItem);
+                    break;
+            }
+        }
+
+        private void Delete(object sender)
         {
             if (sender is MenuFlyoutItem menuItem && menuItem.CommandParameter is ListItemModel model)
             {
@@ -52,6 +68,15 @@ namespace ShoppingList.Views
                         Utils.ToXML(viewModel.Items.ToList());
                     }
                 }
+            }
+        }
+
+        private void MarkAsBought(object sender)
+        {
+            if (sender is MenuFlyoutItem menuItem && menuItem.CommandParameter is ListItemModel model)
+            {
+                model.IsBought = !model.IsBought;
+                Utils.ToXML(viewModel.Items.ToList());
             }
         }
     }

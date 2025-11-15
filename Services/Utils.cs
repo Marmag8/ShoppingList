@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -35,25 +36,29 @@ namespace ShoppingList.Services
 
             foreach (ListItemModel i in items)
             {
-                XmlElement counterNode = doc.CreateElement("Item");
+                XmlElement itemNode = doc.CreateElement("Item");
 
                 XmlElement nameNode = doc.CreateElement("Name");
                 nameNode.InnerText = i.Name;
-                counterNode.AppendChild(nameNode);
+                itemNode.AppendChild(nameNode);
 
                 XmlElement amountNode = doc.CreateElement("Amount");
                 amountNode.InnerText = i.Amount.ToString();
-                counterNode.AppendChild(amountNode);
+                itemNode.AppendChild(amountNode);
 
                 XmlElement unitNode = doc.CreateElement("Unit");
                 unitNode.InnerText = i.Unit.ToString();
-                counterNode.AppendChild(unitNode);
+                itemNode.AppendChild(unitNode);
 
                 XmlElement categoryNode = doc.CreateElement("Category");
                 categoryNode.InnerText = i.Category.ToString();
-                counterNode.AppendChild(categoryNode);
+                itemNode.AppendChild(categoryNode);
 
-                root.AppendChild(counterNode);
+                XmlElement boughtNode = doc.CreateElement("IsBought");
+                boughtNode.InnerText = i.IsBought.ToString();
+                itemNode.AppendChild(boughtNode);
+
+                root.AppendChild(itemNode);
             }
 
             doc.Save(path);
@@ -81,7 +86,13 @@ namespace ShoppingList.Services
                         int amount= int.TryParse(itemNode.SelectSingleNode("Amount")?.InnerText, out int res) ? res : 0;
                         string unit = itemNode.SelectSingleNode("Unit")?.InnerText ?? "szt";
                         string category = itemNode.SelectSingleNode("Category")?.InnerText ?? "Inne";
-                        items.Add(new ListItemModel(name, amount, unit, category));
+
+                        ListItemModel item = new ListItemModel(name, amount, unit, category);
+
+                        if (bool.TryParse(itemNode.SelectSingleNode("IsBought")?.InnerText, out bool isBought)) 
+                            item.IsBought = isBought;
+
+                        items.Add(item);
                     }
                 }
 
