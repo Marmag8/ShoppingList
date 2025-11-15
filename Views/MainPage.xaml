@@ -5,10 +5,7 @@
              Title="Lista Zakupow">
 
     <VerticalStackLayout Padding="10">
-        <Button Text="Dodaj produkt" Clicked="OnAddItemClicked"/>
-        <ScrollView HeightRequest="400">
-            <VerticalStackLayout x:Name="ListLayout"/>
-        </ScrollView>
+        
     </VerticalStackLayout>
 
 </ContentPage>
