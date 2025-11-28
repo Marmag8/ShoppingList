@@ -17,7 +17,7 @@
             <RowDefinition Height="*" />   
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Text="Dodaj produkt" Clicked="OnAddItemClicked" />
+        <Button Grid.Row="0" Text="Dodaj Produkt" Clicked="OnAddItemClicked" />
 
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Items}"
@@ -35,6 +35,10 @@
                                                 Clicked="ContextMenuHandler"
                                                 CommandParameter="{Binding .}" 
                                                 StyleId="MarkAsBought" />
+                                <MenuFlyoutSubItem Text="Opcje Ilości">
+                                    <MenuFlyoutItem Text="Zmniejsz" />
+                                    <MenuFlyoutItem Text="Zwiększ" />
+                                </MenuFlyoutSubItem>
                             </MenuFlyout>
                         </FlyoutBase.ContextFlyout>
 
@@ -53,7 +57,12 @@
                                 <Label Text="{Binding Amount, StringFormat='Ilosc: {0}'}" />
                                 <Label Text="{Binding Unit, StringFormat='{0}'}" />
                             </HorizontalStackLayout>
-                            <Label Text="{Binding Category, StringFormat='Kategoria: {0}'}" />
+                            <Label Text="{Binding Category, StringFormat='Kategoria: {0}'}" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenCategoryView"
+                                                          CommandParameter="{Binding Category}" />
+                                </Label.GestureRecognizers>
+                            </Label>
                         </VerticalStackLayout>
 
                         <Border.Triggers>

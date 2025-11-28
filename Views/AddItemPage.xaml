@@ -4,6 +4,7 @@
              x:Class="ShoppingList.Views.AddItemPage"
              Title="Dodaj Element Listy">
     <VerticalStackLayout Padding="20" Spacing="15">
+        <Button Text="Powrót" Clicked="Return" HorizontalOptions="Start"/>
         <Entry x:Name="Name" Placeholder="Nazwa przedmiotu" />
         <HorizontalStackLayout Spacing="10">
             <Entry x:Name="Amount" Placeholder="Ilość" Keyboard="Numeric" />

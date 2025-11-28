@@ -79,5 +79,18 @@ namespace ShoppingList.Views
                 Utils.ToXML(viewModel.Items.ToList());
             }
         }
+
+        private async void OpenCategoryView(object sender, EventArgs e)
+        {
+            if (sender is TapGestureRecognizer tgr && tgr.CommandParameter is string category)
+            {
+                await Shell.Current.GoToAsync($"{nameof(CategoryViewPage)}?category={category}");
+                return;
+            }
+            else
+            {
+                await Shell.Current.GoToAsync($"{nameof(CategoryViewPage)}?category={"Inne"}");
+            }
+        }
     }
 }

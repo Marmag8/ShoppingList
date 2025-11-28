@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ShoppingList.Views;
@@ -21,6 +22,11 @@ public partial class AddItemPage : ContentPage
 
         OnItemAdded?.Invoke(name, amount, unit, category);
 
+        await Navigation.PopModalAsync();
+    }
+
+    private async void Return(object sender, EventArgs e)
+    {
         await Navigation.PopModalAsync();
     }
 }
