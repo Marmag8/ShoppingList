@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,7 +17,8 @@ namespace ShoppingList.ViewModels
 
         public ShoppingListViewModel()
         {
-            foreach (ListItemModel item in Utils.FromXML())
+            (List<ListItemModel> items, List<string> categories) = Utils.FromXML();
+            foreach (ListItemModel item in items)
                 Items.Add(item);
         }
 
@@ -24,14 +26,16 @@ namespace ShoppingList.ViewModels
         private void DeleteItem(ListItemModel item)
         {
             Items.Remove(item);
-            Utils.ToXML(Items.ToList());
+            IEnumerable<String> categories = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            Utils.ToXML(Items.ToList(), categories);
         }
 
         [RelayCommand]
         private void AddItem(ListItemModel item)
         {
             Items.Add(item);
-            Utils.ToXML(Items.ToList());
+            IEnumerable<String> cats = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            Utils.ToXML(Items.ToList(), cats);
         }
     }
 }

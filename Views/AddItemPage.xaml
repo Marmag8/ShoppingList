@@ -22,18 +22,7 @@
             </Picker>
         </HorizontalStackLayout>
         <Label Text="Wybierz kategorię:" />
-        <Picker x:Name="Category" HeightRequest="20">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Mleczne</x:String>
-                    <x:String>Owoce</x:String>
-                    <x:String>Warzywa</x:String>
-                    <x:String>Mięso</x:String>
-                    <x:String>Picie</x:String>
-                    <x:String>Inne</x:String>
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+        <Picker x:Name="Category" HeightRequest="20" />
         <Button Text="Dodaj Produkt" Clicked="OnConfirm" />
     </VerticalStackLayout>
 </ContentPage>

@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using ShoppingList.Models;
 using ShoppingList.Services;
 using ShoppingList.ViewModels;
@@ -14,6 +15,11 @@ namespace ShoppingList.Views
 
             viewModel = BindingContext as ShoppingListViewModel ?? new ShoppingListViewModel();
             BindingContext = viewModel;
+
+            BuildCategoryViews();
+
+            if (viewModel.Items is INotifyCollectionChanged collection)
+                collection.CollectionChanged += Items_CollectionChanged;
         }
 
         private async void OnAddItemClicked(object sender, EventArgs e)
@@ -28,7 +34,8 @@ namespace ShoppingList.Views
                     else
                     {
                         viewModel.Items.Add(item);
-                        Utils.ToXML(viewModel.Items.ToList());
+                        IEnumerable<String> categories = viewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                        Utils.ToXML(viewModel.Items.ToList(), categories);
                     }
                 }
             };
@@ -36,61 +43,32 @@ namespace ShoppingList.Views
             await Navigation.PushModalAsync(addItemPage);
         }
 
-        private void ContextMenuHandler(object sender, EventArgs e)
+        private void BuildCategoryViews()
         {
-            if (sender is not MenuFlyoutItem menuItem)
-                return;
+            CategoriesLayout.Children.Clear();
 
-            switch (menuItem.StyleId)
-            {
-                case "Delete":
-                    Delete(menuItem);
-                    break;
-                case "MarkAsBought":
-                    MarkAsBought(menuItem);
-                    break;
-            }
-        }
+            List<String> categories = viewModel.Items
+                .Select(i => string.IsNullOrWhiteSpace(i.Category) ? "Inne" : i.Category!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
-        private void Delete(object sender)
-        {
-            if (sender is MenuFlyoutItem menuItem && menuItem.CommandParameter is ListItemModel model)
+            foreach (String category in categories)
             {
-                if (viewModel.DeleteItemCommand?.CanExecute(model) ?? false)
+                CategoryView categoryView = new CategoryView
                 {
-                    viewModel.DeleteItemCommand.Execute(model);
-                }
-                else
-                {
-                    if (viewModel.Items.Contains(model))
-                    {
-                        viewModel.Items.Remove(model);
-                        Utils.ToXML(viewModel.Items.ToList());
-                    }
-                }
+                    Category = category,
+                    AllItems = viewModel.Items.OrderBy(i => i.IsBought),
+                    BindingContext = viewModel
+                };
+
+                CategoriesLayout.Children.Add(categoryView);
             }
         }
 
-        private void MarkAsBought(object sender)
+        private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (sender is MenuFlyoutItem menuItem && menuItem.CommandParameter is ListItemModel model)
-            {
-                model.IsBought = !model.IsBought;
-                Utils.ToXML(viewModel.Items.ToList());
-            }
-        }
-
-        private async void OpenCategoryView(object sender, EventArgs e)
-        {
-            if (sender is TapGestureRecognizer tgr && tgr.CommandParameter is string category)
-            {
-                await Shell.Current.GoToAsync($"{nameof(CategoryViewPage)}?category={category}");
-                return;
-            }
-            else
-            {
-                await Shell.Current.GoToAsync($"{nameof(CategoryViewPage)}?category={"Inne"}");
-            }
+            MainThread.BeginInvokeOnMainThread(BuildCategoryViews);
         }
     }
 }

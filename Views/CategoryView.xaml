@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ShoppingList.Views"
+             xmlns:models="clr-namespace:ShoppingList.Models"
+             x:Class="ShoppingList.Views.CategoryView"
+             x:Name="Root"
+             x:DataType="models:ListItemModel">
+  <VerticalStackLayout Spacing="8" Padding="8">
+    <Label x:Name="HeaderLabel" FontSize="20" FontAttributes="Bold" />
+    <CollectionView x:Name="ItemsCollectionView" SelectionMode="None">
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <local:ItemView BindingContext="{Binding .}"
+                            ParentViewModel="{Binding Source={x:Reference Root}, Path=BindingContext}" />
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+  </VerticalStackLayout>
+</ContentView>
