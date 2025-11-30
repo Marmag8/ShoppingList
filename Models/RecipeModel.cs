@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using ShoppingList.Models;
-
 namespace ShoppingList.Models
 {
     public sealed class RecipeModel

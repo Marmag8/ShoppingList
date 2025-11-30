@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoppingList.Views.Recipes.AddRecipePage"
+             Title="Dodaj Przepis">
+  <VerticalStackLayout Padding="20" Spacing="12">
+    <Button Text="Powrot" Clicked="Return" HorizontalOptions="Start" />
+
+    <Entry x:Name="RecipeName" Placeholder="Nazwa przepisu" />
+
+    <Picker x:Name="RecipeCategory" Title="Kategoria przepisu">
+      <Picker.ItemsSource>
+        <x:Array Type="{x:Type x:String}">
+          <x:String>Przystawki</x:String>
+          <x:String>Dania Glowne</x:String>
+          <x:String>Desery</x:String>
+          <x:String>Napoje</x:String>
+        </x:Array>
+      </Picker.ItemsSource>
+    </Picker>
+
+    <Label Text="Skladniki" FontAttributes="Bold" />
+
+    <Grid ColumnDefinitions="2*,Auto,Auto,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="6">
+      <Entry x:Name="IngredientName" Placeholder="Nazwa skladnika" Grid.Column="0" />
+      <Entry x:Name="IngredientAmount" Placeholder="Ilosc" Keyboard="Numeric" Grid.Column="1" WidthRequest="70" />
+      <Picker x:Name="IngredientUnit" Grid.Column="2" WidthRequest="70">
+        <Picker.ItemsSource>
+          <x:Array Type="{x:Type x:String}">
+            <x:String>mg</x:String>
+            <x:String>g</x:String>
+            <x:String>kg</x:String>
+            <x:String>ml</x:String>
+            <x:String>l</x:String>
+            <x:String>szt</x:String>
+          </x:Array>
+        </Picker.ItemsSource>
+      </Picker>
+      <Picker x:Name="IngredientCategoryPicker"
+              Grid.Column="3"
+              WidthRequest="110" />
+      <Button Text="Dodaj" Grid.Column="4" Clicked="OnAddIngredient" />
+    </Grid>
+
+    <CollectionView x:Name="IngredientsCollection"
+                    SelectionMode="None"
+                    HeightRequest="240">
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+          <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+                Padding="6,4"
+                ColumnSpacing="0">
+            <Label Grid.Column="0" Text="{Binding Amount}" />
+            <Label Grid.Column="1" Text="{Binding Unit}" />
+            <Label Grid.Column="2" Text="{Binding Name, StringFormat='   {0}'}" />
+            <Button Grid.Column="4"
+                    Text="Usun"
+                    Clicked="OnRemoveIngredient" />
+          </Grid>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+
+    <Button Text="Zapisz przepis" Clicked="OnConfirm" />
+  </VerticalStackLayout>
+</ContentPage>

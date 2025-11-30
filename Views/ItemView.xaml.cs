@@ -47,5 +47,39 @@ namespace ShoppingList.Views
                 Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
             }
         }
+
+        private void Increase(object sender, EventArgs e)
+        {
+            if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
+            {
+                model.Amount++;
+                IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+            }
+        }
+
+        private void Decrease(object sender, EventArgs e)
+        {
+            if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
+            {
+                model.Amount--;
+                IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+            }
+        }
+
+        private async void ChangeAmount(object sender, EventArgs e)
+        {
+            if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
+            {
+                string? result = await Application.Current.MainPage.DisplayPromptAsync("Iloœæ", "Podaj now¹ iloœæ:");
+                if (int.TryParse(result, out int newAmount))
+                {
+                    model.Amount = newAmount;
+                    IEnumerable<string> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+                }
+            }
+        }
     }
 }

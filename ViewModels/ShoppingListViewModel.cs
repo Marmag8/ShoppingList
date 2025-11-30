@@ -34,8 +34,8 @@ namespace ShoppingList.ViewModels
         private void AddItem(ListItemModel item)
         {
             Items.Add(item);
-            IEnumerable<String> cats = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            Utils.ToXML(Items.ToList(), cats);
+            IEnumerable<String> categories = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            Utils.ToXML(Items.ToList(), categories);
         }
     }
 }

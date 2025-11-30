@@ -9,12 +9,21 @@
             <MenuFlyout>
                 <MenuFlyoutItem Text="Usuń"
                         Clicked="DeleteItem"
-                        CommandParameter="{Binding .}"
-                        StyleId="Delete" />
+                        CommandParameter="{Binding .}"/>
                 <MenuFlyoutItem Text="Oznacz/odznacz jako kupione"
                         Clicked="MarkAsBought"
-                        CommandParameter="{Binding .}"
-                        StyleId="MarkAsBought" />
+                        CommandParameter="{Binding .}"/>
+                <MenuFlyoutSubItem Text="Opcje Ilości">
+                    <MenuFlyoutItem Text="Zwiększ ilość"
+                            Clicked="Increase"
+                            CommandParameter="{Binding .}"/>
+                    <MenuFlyoutItem Text="Zmniejsz ilość"
+                            Clicked="Decrease"
+                            CommandParameter="{Binding .}"/>
+                    <MenuFlyoutItem Text="Podaj nową ilość"
+                                    Clicked="ChangeAmount"
+                                    CommandParameter="{Binding .}"/>
+                </MenuFlyoutSubItem>
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
 

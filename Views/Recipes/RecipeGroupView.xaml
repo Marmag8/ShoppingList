@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ShoppingList.Views.Recipes"
+             x:Class="ShoppingList.Views.Recipes.RecipeGroupView"
+             x:Name="Root">
+  <VerticalStackLayout Spacing="8" Padding="8">
+    <Label x:Name="HeaderLabel" FontSize="20" FontAttributes="Bold" TextColor="MediumPurple"/>
+    <CollectionView x:Name="RecipesCollectionView" SelectionMode="None">
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+          <local:RecipeView BindingContext="{Binding .}"
+                                ParentViewModel="{Binding Source={x:Reference Root}, Path=BindingContext}" />
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+  </VerticalStackLayout>
+</ContentView>

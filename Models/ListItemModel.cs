@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ShoppingList.Models
 {
@@ -12,40 +7,40 @@ namespace ShoppingList.Models
         [ObservableProperty]
         private bool isBought;
 
-        private String _name;
-        public String Name
+        private string _name;
+        public string Name
         {
-            get { return _name; }
-            set { _name = value; }
+            get => _name;
+            set => _name = value;
         }
 
         private int _amount;
         public int Amount
         {
-            get { return _amount; }
-            set { _amount = value; }
+            get => _amount;
+            set => SetProperty(ref _amount, value);
         }
 
-        private String _unit;
-        public String Unit
+        private string _unit;
+        public string Unit
         {
-            get { return _unit; }
-            set { _unit = value; }
+            get => _unit;
+            set => _unit = value;
         }
 
-        private String _category;
-        public String Category
+        private string _category;
+        public string Category
         {
-            get { return _category; }
-            set { _category = value; }
+            get => _category;
+            set => _category = value;
         }
 
-        public ListItemModel(String name, int amount, String unit, String category)
+        public ListItemModel(string name, int amount, string unit, string category)
         {
-            this.Name = name;
-            this.Amount = amount;
-            this.Unit = unit;
-            this.Category = category;
+            Name = name;
+            Amount = amount;
+            Unit = unit;
+            Category = category;
         }
     }
 }

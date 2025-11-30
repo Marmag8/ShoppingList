@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Models;
@@ -8,27 +10,49 @@ namespace ShoppingList.ViewModels
 {
     public partial class RecipesViewModel : ObservableObject
     {
-        private readonly ShoppingListViewModel shoppingViewModel;
+        private readonly ShoppingListViewModel _shoppingListViewModel;
 
         public ObservableCollection<RecipeModel> Recipes { get; } = new();
+
+        public static readonly string[] PresetCategories = new[]
+        {
+            "Przystawki",
+            "Dania G³ówne",
+            "Desery",
+            "Napoje"
+        };
 
         public RecipesViewModel() : this(new ShoppingListViewModel())
         {
         }
 
-        public RecipesViewModel(ShoppingListViewModel shoppingViewModel)
+        public RecipesViewModel(ShoppingListViewModel shoppingListViewModel)
         {
-            this.shoppingViewModel = shoppingViewModel ?? throw new ArgumentNullException(nameof(shoppingViewModel));
-            Seed();
+            _shoppingListViewModel = shoppingListViewModel ?? throw new ArgumentNullException(nameof(shoppingListViewModel));
+
+            List<String> categories = _shoppingListViewModel.Items
+                .Select(i => i.Category)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            foreach (RecipeModel r in Utils.FromRecipesXML())
+                Recipes.Add(r);
+
+            if (Recipes.Count == 0)
+                PopulateRecipes(); 
+
+            if (Recipes is INotifyCollectionChanged collection)
+                collection.CollectionChanged += (sender, args) => Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
         }
 
-        private void Seed()
+        private void PopulateRecipes()
         {
             if (Recipes.Count > 0) return;
 
             Recipes.Add(new RecipeModel(
                 "Sa³atka Grecka",
-                "Sa³atki",
+                "Przystawki",
                 new[]
                 {
                     new ListItemModel("Pomidor", 2, "szt", "Warzywa"),
@@ -39,7 +63,7 @@ namespace ShoppingList.ViewModels
 
             Recipes.Add(new RecipeModel(
                 "Spaghetti Bolognese",
-                "Dania g³ówne",
+                "Dania G³ówne",
                 new[]
                 {
                     new ListItemModel("Makaron spaghetti", 500, "g", "Inne"),
@@ -55,26 +79,44 @@ namespace ShoppingList.ViewModels
             if (recipe is null)
                 return;
 
-            foreach (ListItemModel ing in recipe.Ingredients)
+            foreach (ListItemModel ingredient in recipe.Ingredients)
             {
-                ListItemModel? existing = shoppingViewModel.Items.FirstOrDefault(i =>
-                    i.Name == ing.Name &&
-                    i.Unit == ing.Unit &&
-                    i.Category == ing.Category);
+                var existing = _shoppingListViewModel.Items.FirstOrDefault(i =>
+                    i.Name == ingredient.Name &&
+                    i.Unit == ingredient.Unit &&
+                    i.Category == ingredient.Category);
 
                 if (existing is not null)
-                    existing.Amount += ing.Amount;
+                    existing.Amount += ingredient.Amount;
                 else
-                    shoppingViewModel.Items.Add(new ListItemModel(ing.Name, ing.Amount, ing.Unit, ing.Category));
+                    _shoppingListViewModel.Items.Add(new ListItemModel(ingredient.Name, ingredient.Amount, ingredient.Unit, ingredient.Category));
             }
 
-            var cats = shoppingViewModel.Items
+            List<String> categories = _shoppingListViewModel.Items
                 .Select(i => i.Category)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            Utils.ToXML(shoppingViewModel.Items.ToList(), cats);
+            Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
+        }
+
+        [RelayCommand]
+        private void AddCustomRecipe((string Name, string Category, IReadOnlyList<ListItemModel> Ingredients) data)
+        {
+            string name = string.IsNullOrWhiteSpace(data.Name) ? "Bez nazwy" : data.Name;
+            string category = PresetCategories.Contains(data.Category, StringComparer.OrdinalIgnoreCase)
+                ? data.Category
+                : "Przystawki";
+
+            List<String> categories = _shoppingListViewModel.Items
+                .Select(i => i.Category)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            Recipes.Add(new RecipeModel(name, category, data.Ingredients ?? Array.Empty<ListItemModel>()));
+            Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
         }
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:ShoppingList.ViewModels"
@@ -7,19 +7,37 @@
              x:DataType="viewModels:RecipesViewModel"
              Title="Przepisy">
   <ContentPage.BindingContext>
-    <viewModels:RecipesViewModel />
+      <viewModels:RecipesViewModel />
   </ContentPage.BindingContext>
 
   <Grid Padding="10" RowSpacing="8">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+      <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
 
-    <Label Grid.Row="0" Text="Przepisy" FontSize="24" FontAttributes="Bold" />
+      <Grid Grid.Row="0" Padding="5">
+          <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
 
-    <ScrollView Grid.Row="1">
-      <VerticalStackLayout x:Name="CategoriesLayout" Spacing="12" />
-    </ScrollView>
+          <Label Text="Przepisy"
+                 FontSize="24"
+                 FontAttributes="Bold"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Center"
+                 Grid.ColumnSpan="2" />
+
+          <Button Text="Dodaj Przepis"
+                  Clicked="OnAddRecipeClicked"
+                  Grid.Column="1"
+                  HorizontalOptions="End"
+                  VerticalOptions="Center" />
+      </Grid>
+
+      <ScrollView Grid.Row="1">
+          <VerticalStackLayout x:Name="CategoriesLayout" Spacing="12" />
+      </ScrollView>
   </Grid>
 </ContentPage>

@@ -1,20 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:ShoppingList.Views.Recipes"
              xmlns:models="clr-namespace:ShoppingList.Models"
              x:Class="ShoppingList.Views.Recipes.RecipeView"
-             x:Name="Root">
-  <VerticalStackLayout Spacing="8" Padding="8">
-    <Label x:Name="HeaderLabel" FontSize="20" FontAttributes="Bold" />
-    <CollectionView x:Name="RecipesCollectionView" SelectionMode="None">
-      <CollectionView.ItemTemplate>
-        <DataTemplate>
-          <local:RecipeItemView BindingContext="{Binding .}"
-                                ParentViewModel="{Binding Source={x:Reference Root}, Path=BindingContext}" />
-        </DataTemplate>
-      </CollectionView.ItemTemplate>
-    </CollectionView>
-  </VerticalStackLayout>
+             x:DataType="models:RecipeModel">
+  <Border Padding="10" Margin="5" StrokeThickness="1" Stroke="#DDD" BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <VerticalStackLayout Spacing="6">
+            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+            <Label Text="Składniki:" FontAttributes="Bold" FontSize="14" />
+
+      <VerticalStackLayout Spacing="4"
+                           BindableLayout.ItemsSource="{Binding Ingredients}">
+          <BindableLayout.ItemTemplate>
+              <DataTemplate x:DataType="models:ListItemModel">
+                  <HorizontalStackLayout Spacing="0">
+                      <Label Text="{Binding Amount}" FontSize="13" />
+                      <Label Text="{Binding Unit}" FontSize="13" />
+                      <Label Text="{Binding Name, StringFormat='   {0}'}" FontSize="13"/>
+                  </HorizontalStackLayout>
+              </DataTemplate>
+          </BindableLayout.ItemTemplate>
+      </VerticalStackLayout>
+
+      <VerticalStackLayout Spacing="2">
+        <Label Text="{Binding Ingredients.Count, StringFormat='Liczba pozycji: {0}'}" FontSize="12" />
+      </VerticalStackLayout>
+
+        <HorizontalStackLayout Spacing="12">
+            <Button Text="Dodaj składniki do listy"
+                    x:Name="AddButton"
+                    HorizontalOptions="Start" />
+
+            <Label x:Name="ResultLabel" Text="Dodano Pomyślnie" TextColor="LawnGreen" IsVisible="False"></Label>
+        </HorizontalStackLayout>
+      
+    </VerticalStackLayout>
+  </Border>
 </ContentView>

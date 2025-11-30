@@ -1,43 +1,58 @@
 using System.Collections.Specialized;
+using ShoppingList.Models;
 using ShoppingList.ViewModels;
 
 namespace ShoppingList.Views.Recipes
 {
     public partial class RecipesPage : ContentPage
     {
-        private readonly RecipesViewModel viewModel;
+        private readonly RecipesViewModel _viewModel;
 
         public RecipesPage(RecipesViewModel vm)
         {
             InitializeComponent();
-            viewModel = vm;
-            BindingContext = viewModel;
+            _viewModel = vm;
+            BindingContext = _viewModel;
 
             BuildCategoryViews();
 
-            if (viewModel.Recipes is INotifyCollectionChanged incc)
-                incc.CollectionChanged += (_, __) => MainThread.BeginInvokeOnMainThread(BuildCategoryViews);
+            if (_viewModel.Recipes is INotifyCollectionChanged collection)
+                collection.CollectionChanged += (sender, args) => MainThread.BeginInvokeOnMainThread(BuildCategoryViews);
+        }
+
+        private async void OnAddRecipeClicked(object sender, EventArgs e)
+        {
+            var addPage = new AddRecipePage(_viewModel)
+            {
+                OnRecipeAdded = (name, category, ingredients) =>
+                {
+                    var recipe = new RecipeModel(name, category, ingredients);
+                    _viewModel.Recipes.Add(recipe);
+                }
+            };
+
+            await Navigation.PushModalAsync(addPage);
         }
 
         private void BuildCategoryViews()
         {
             CategoriesLayout.Children.Clear();
 
-            var categories = viewModel.Recipes
+            var categories = _viewModel.Recipes
                 .Select(r => string.IsNullOrWhiteSpace(r.Category) ? "Inne" : r.Category)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            foreach (var cat in categories)
+            foreach (String category in categories)
             {
-                var v = new RecipeView
+                RecipeGroupView group = new RecipeGroupView
                 {
-                    Category = cat,
-                    AllRecipes = viewModel.Recipes,
-                    BindingContext = viewModel
+                    Category = category,
+                    AllRecipes = _viewModel.Recipes,
+                    BindingContext = _viewModel
                 };
-                CategoriesLayout.Children.Add(v);
+                CategoriesLayout.Children.Add(group);
             }
         }
     }
