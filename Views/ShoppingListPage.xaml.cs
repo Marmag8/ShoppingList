@@ -9,11 +9,10 @@ namespace ShoppingList.Views
     {
         private readonly ShoppingListViewModel viewModel;
 
-        public ShoppingListPage()
+        public ShoppingListPage(ShoppingListViewModel vm)
         {
             InitializeComponent();
-
-            viewModel = BindingContext as ShoppingListViewModel ?? new ShoppingListViewModel();
+            viewModel = vm;
             BindingContext = viewModel;
 
             BuildCategoryViews();
@@ -34,7 +33,11 @@ namespace ShoppingList.Views
                     else
                     {
                         viewModel.Items.Add(item);
-                        IEnumerable<String> categories = viewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                        IEnumerable<string> categories = viewModel.Items
+                            .Select(i => i.Category)
+                            .Where(s => !string.IsNullOrWhiteSpace(s))
+                            .Distinct(StringComparer.OrdinalIgnoreCase)
+                            .ToList();
                         Utils.ToXML(viewModel.Items.ToList(), categories);
                     }
                 }
@@ -47,13 +50,13 @@ namespace ShoppingList.Views
         {
             CategoriesLayout.Children.Clear();
 
-            List<String> categories = viewModel.Items
+            List<string> categories = viewModel.Items
                 .Select(i => string.IsNullOrWhiteSpace(i.Category) ? "Inne" : i.Category!)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            foreach (String category in categories)
+            foreach (string category in categories)
             {
                 CategoryView categoryView = new CategoryView
                 {

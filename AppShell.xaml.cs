@@ -1,10 +1,11 @@
-﻿namespace ShoppingList
+﻿namespace ShoppingList;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        // Rejestr dodatkowych tras jeśli potrzebne:
+        // Routing.RegisterRoute("category", typeof(Views.CategoryViewPage));
     }
 }

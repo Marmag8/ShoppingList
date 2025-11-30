@@ -6,15 +6,18 @@
              x:Class="ShoppingList.Views.CategoryView"
              x:Name="Root"
              x:DataType="models:ListItemModel">
-  <VerticalStackLayout Spacing="8" Padding="8">
-    <Label x:Name="HeaderLabel" FontSize="20" FontAttributes="Bold" />
-    <CollectionView x:Name="ItemsCollectionView" SelectionMode="None">
-      <CollectionView.ItemTemplate>
-        <DataTemplate>
-            <local:ItemView BindingContext="{Binding .}"
-                            ParentViewModel="{Binding Source={x:Reference Root}, Path=BindingContext}" />
-        </DataTemplate>
-      </CollectionView.ItemTemplate>
-    </CollectionView>
-  </VerticalStackLayout>
+    <Border StrokeThickness="2"
+            StrokeShape="RoundRectangle 10,10,10,10">
+        <VerticalStackLayout Spacing="8" Padding="8">
+        <Label x:Name="HeaderLabel" FontSize="20" FontAttributes="Bold" TextColor="MediumPurple"/>
+        <CollectionView x:Name="ItemsCollectionView" SelectionMode="None">
+          <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <local:ItemView BindingContext="{Binding .}"
+                                ParentViewModel="{Binding Source={x:Reference Root}, Path=BindingContext}" />
+            </DataTemplate>
+          </CollectionView.ItemTemplate>
+        </CollectionView>
+      </VerticalStackLayout>
+    </Border>
 </ContentView>

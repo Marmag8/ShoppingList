@@ -66,6 +66,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\Recipes\RecipeItemView.xaml.cs">
+	    <DependentUpon>RecipeItemView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Recipes\RecipeView.xaml.cs">
+	    <DependentUpon>RecipeView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\AddItemPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -73,6 +82,15 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ItemView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Recipes\RecipeItemView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Recipes\RecipesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Recipes\RecipeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ShoppingListPage.xaml">

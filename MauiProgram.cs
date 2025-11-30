@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using ShoppingList.ViewModels;
+using ShoppingList.Views;
 
 namespace ShoppingList
 {
@@ -14,6 +16,12 @@ namespace ShoppingList
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<ShoppingListViewModel>();
+            builder.Services.AddSingleton<RecipesViewModel>();
+
+            builder.Services.AddTransient<ShoppingListPage>();
+            builder.Services.AddTransient<ShoppingList.Views.Recipes.RecipesPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

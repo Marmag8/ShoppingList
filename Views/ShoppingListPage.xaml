@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:ShoppingList.ViewModels"
-             xmlns:views="clr-namespace:ShoppingList.Views"
              x:Class="ShoppingList.Views.ShoppingListPage"
              x:DataType="viewModels:ShoppingListViewModel"
              x:Name="RootPage"
@@ -11,7 +10,7 @@
     <viewModels:ShoppingListViewModel />
   </ContentPage.BindingContext>
 
-  <Grid Padding="10" RowSpacing="8">
+  <Grid Padding="10" RowSpacing="8" Margin="0">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
@@ -19,8 +18,8 @@
 
     <Button Grid.Row="0" Text="Dodaj Produkt" Clicked="OnAddItemClicked" />
 
-    <ScrollView Grid.Row="1">
-      <VerticalStackLayout x:Name="CategoriesLayout" Spacing="12" />
-    </ScrollView>
-  </Grid>
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout x:Name="CategoriesLayout" Spacing="12" />
+        </ScrollView>
+    </Grid>
 </ContentPage>

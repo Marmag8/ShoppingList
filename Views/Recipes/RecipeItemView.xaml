@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ShoppingList.Models"
+             x:Class="ShoppingList.Views.Recipes.RecipeItemView"
+             x:DataType="models:RecipeModel">
+  <Border Padding="10" Margin="5" StrokeThickness="1" Stroke="#DDD" BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <VerticalStackLayout Spacing="6">
+      <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+      <Label Text="{Binding Category, StringFormat='Kategoria: {0}'}" FontSize="14" />
+      <Label Text="Składniki:" FontAttributes="Bold" FontSize="14" />
+
+      <VerticalStackLayout Spacing="4"
+                           BindableLayout.ItemsSource="{Binding Ingredients}">
+          <BindableLayout.ItemTemplate>
+              <DataTemplate x:DataType="models:ListItemModel">
+                  <HorizontalStackLayout Spacing="0">
+                      <Label Text="{Binding Amount}" FontSize="13" />
+                      <Label Text="{Binding Unit}" FontSize="13" />
+                      <Label Text="{Binding Name, StringFormat='   {0}'}" FontSize="13"/>
+                  </HorizontalStackLayout>
+              </DataTemplate>
+          </BindableLayout.ItemTemplate>
+      </VerticalStackLayout>
+
+      <VerticalStackLayout Spacing="2">
+        <Label Text="{Binding Ingredients.Count, StringFormat='Liczba pozycji: {0}'}" FontSize="12" />
+      </VerticalStackLayout>
+
+      <Button Text="Dodaj składniki do listy"
+              x:Name="AddButton"
+              HorizontalOptions="Start" />
+    </VerticalStackLayout>
+  </Border>
+</ContentView>

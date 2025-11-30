@@ -4,7 +4,7 @@
              xmlns:models="clr-namespace:ShoppingList.Models"
              x:Class="ShoppingList.Views.ItemView"
              x:DataType="models:ListItemModel">
-  <Border x:Name="Item" Margin="5" Padding="10">
+  <Border x:Name="Item" Margin="5" Padding="10" StrokeThickness="0" >
         <FlyoutBase.ContextFlyout>
             <MenuFlyout>
                 <MenuFlyoutItem Text="Usuń"
