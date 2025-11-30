@@ -16,7 +16,12 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <Button Grid.Row="0" Text="Dodaj Produkt" Clicked="OnAddItemClicked" />
+        <HorizontalStackLayout Grid.Row="0" Spacing="10">
+            <Button Text="Dodaj Produkt" Clicked="OnAddItemClicked" />
+            <Button Text="Generuj Listę do Sklepu" Clicked="OpenStorePage" />
+            <Button Text="Importuj (*.xml)" Clicked="OnImportClicked" />
+            <Button Text="Eksportuj (*.xml)" Clicked="OnExportClicked" />
+        </HorizontalStackLayout>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout x:Name="CategoriesLayout" Spacing="12" />

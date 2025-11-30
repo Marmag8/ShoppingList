@@ -5,7 +5,8 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
-        // Rejestr dodatkowych tras jeśli potrzebne:
-        // Routing.RegisterRoute("category", typeof(Views.CategoryViewPage));
+
+        Routing.RegisterRoute(nameof(Views.StorePage), typeof(Views.StorePage));
+        Routing.RegisterRoute(nameof(Views.ShoppingListPage), typeof(Views.ShoppingListPage));
     }
 }

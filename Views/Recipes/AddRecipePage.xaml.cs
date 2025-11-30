@@ -31,19 +31,16 @@ public partial class AddRecipePage : ContentPage
 
     private void LoadIngredientCategories()
     {
-        var (_, fileCategories) = Utils.FromXML();
+        (List<ListItemModel> itemsFromFile, List<string> categoriesFromFile) = Utils.FromXML();
 
-        var cats = fileCategories
+        List<String> categoriess = categoriesFromFile
             .Where(c => !string.IsNullOrWhiteSpace(c))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        if (!cats.Contains("Inne", StringComparer.OrdinalIgnoreCase))
-            cats.Add("Inne");
-
         _ingredientCategories.Clear();
-        foreach (var c in cats)
+        foreach (var c in categoriess)
             _ingredientCategories.Add(c);
 
         IngredientCategoryPicker.ItemsSource = _ingredientCategories;
