@@ -20,6 +20,15 @@ namespace ShoppingList.Views
             InitializeComponent();
         }
 
+        private void UpdateDataFile()
+        {
+            IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+        }
+
         private void DeleteItem(object sender, EventArgs e)
         {
             if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
@@ -31,8 +40,7 @@ namespace ShoppingList.Views
                     if (ParentViewModel.Items.Contains(model))
                     {
                         ParentViewModel.Items.Remove(model);
-                        IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                        Utils.ToXML(ParentViewModel.Items.ToList(), categories);
+                        UpdateDataFile();
                     }
                 }
             }
@@ -43,8 +51,16 @@ namespace ShoppingList.Views
             if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
             {
                 model.IsBought = !model.IsBought;
-                IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+                UpdateDataFile();
+            }
+        }
+
+        private void MarkAsOptional(object sender, EventArgs e)
+        {
+            if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
+            {
+                model.IsOptional = !model.IsOptional;
+                UpdateDataFile();
             }
         }
 
@@ -53,8 +69,7 @@ namespace ShoppingList.Views
             if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
             {
                 model.Amount++;
-                IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+                UpdateDataFile();
             }
         }
 
@@ -63,8 +78,7 @@ namespace ShoppingList.Views
             if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
             {
                 model.Amount--;
-                IEnumerable<String> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+                UpdateDataFile();
             }
         }
 
@@ -76,8 +90,7 @@ namespace ShoppingList.Views
                 if (int.TryParse(result, out int newAmount))
                 {
                     model.Amount = newAmount;
-                    IEnumerable<string> categories = ParentViewModel.Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                    Utils.ToXML(ParentViewModel?.Items.ToList() ?? new(), categories);
+                    UpdateDataFile();
                 }
             }
         }

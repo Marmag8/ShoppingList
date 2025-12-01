@@ -49,8 +49,8 @@ namespace ShoppingList.Views
 
             if (oldVal is IEnumerable<ListItemModel> oldEnum)
             {
-                foreach (INotifyPropertyChanged it in oldEnum.OfType<INotifyPropertyChanged>())
-                    it.PropertyChanged -= view.OnItemPropertyChanged;
+                foreach (INotifyPropertyChanged prop in oldEnum.OfType<INotifyPropertyChanged>())
+                    prop.PropertyChanged -= view.OnItemPropertyChanged;
             }
 
             if (oldVal is INotifyCollectionChanged oldCollection)
@@ -58,8 +58,8 @@ namespace ShoppingList.Views
 
             if (newVal is IEnumerable<ListItemModel> newEnum)
             {
-                foreach (var it in newEnum.OfType<INotifyPropertyChanged>())
-                    it.PropertyChanged += view.OnItemPropertyChanged;
+                foreach (INotifyPropertyChanged prop in newEnum.OfType<INotifyPropertyChanged>())
+                    prop.PropertyChanged += view.OnItemPropertyChanged;
             }
 
             if (newVal is INotifyCollectionChanged newCollection)
@@ -100,7 +100,7 @@ namespace ShoppingList.Views
                 return;
 
             IEnumerable<ListItemModel> matches = AllItems
-                .Where(i => string.Equals(i.Category ?? string.Empty, Category ?? string.Empty, StringComparison.OrdinalIgnoreCase))
+                .Where(i => string.Equals(i.Category, Category, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(i => i.IsBought)
                 .ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase);
             foreach (ListItemModel item in matches)

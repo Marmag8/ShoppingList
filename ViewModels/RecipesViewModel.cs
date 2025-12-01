@@ -55,10 +55,10 @@ namespace ShoppingList.ViewModels
                 "Przystawki",
                 new[]
                 {
-                    new ListItemModel("Pomidor", 2, "szt", "Warzywa"),
-                    new ListItemModel("Ogórek", 1, "szt", "Warzywa"),
-                    new ListItemModel("Feta", 200, "g", "Mleczne"),
-                    new ListItemModel("Oliwki", 150, "g", "Inne")
+                    new ListItemModel("Pomidor", 2, "szt", "Warzywa", false),
+                    new ListItemModel("Ogórek", 1, "szt", "Warzywa", true),
+                    new ListItemModel("Feta", 200, "g", "Mleczne", false),
+                    new ListItemModel("Oliwki", 150, "g", "Inne", true)
                 }));
 
             Recipes.Add(new RecipeModel(
@@ -66,10 +66,10 @@ namespace ShoppingList.ViewModels
                 "Dania G³ówne",
                 new[]
                 {
-                    new ListItemModel("Makaron spaghetti", 500, "g", "Inne"),
-                    new ListItemModel("Miêso mielone", 400, "g", "Miêso"),
-                    new ListItemModel("Pomidory krojone", 400, "g", "Warzywa"),
-                    new ListItemModel("Cebula", 1, "szt", "Warzywa")
+                    new ListItemModel("Makaron spaghetti", 500, "g", "Inne", false),
+                    new ListItemModel("Miêso mielone", 400, "g", "Miêso", false),
+                    new ListItemModel("Pomidory krojone", 400, "g", "Warzywa", false),
+                    new ListItemModel("Cebula", 1, "szt", "Warzywa", true)
                 }));
         }
 
@@ -87,9 +87,16 @@ namespace ShoppingList.ViewModels
                     i.Category == ingredient.Category);
 
                 if (existing is not null)
+                {
                     existing.Amount += ingredient.Amount;
+                    if (ingredient.IsOptional && !existing.IsOptional)
+                        existing.IsOptional = true;
+                }
                 else
-                    _shoppingListViewModel.Items.Add(new ListItemModel(ingredient.Name, ingredient.Amount, ingredient.Unit, ingredient.Category));
+                {
+                    _shoppingListViewModel.Items.Add(
+                        new ListItemModel(ingredient.Name, ingredient.Amount, ingredient.Unit, ingredient.Category, ingredient.IsOptional));
+                }
             }
 
             List<String> categories = _shoppingListViewModel.Items

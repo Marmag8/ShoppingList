@@ -22,7 +22,7 @@ namespace ShoppingList.Views.Recipes
 
         private async void OnAddRecipeClicked(object sender, EventArgs e)
         {
-            var addPage = new AddRecipePage(_viewModel)
+            AddRecipePage addPage = new AddRecipePage(_viewModel)
             {
                 OnRecipeAdded = (name, category, ingredients) =>
                 {
@@ -38,7 +38,7 @@ namespace ShoppingList.Views.Recipes
         {
             CategoriesLayout.Children.Clear();
 
-            var categories = _viewModel.Recipes
+            List<string> categories = _viewModel.Recipes
                 .Select(r => string.IsNullOrWhiteSpace(r.Category) ? "Inne" : r.Category)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)

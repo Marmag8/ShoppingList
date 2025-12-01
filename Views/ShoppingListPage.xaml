@@ -4,7 +4,6 @@
              xmlns:viewModels="clr-namespace:ShoppingList.ViewModels"
              x:Class="ShoppingList.Views.ShoppingListPage"
              x:DataType="viewModels:ShoppingListViewModel"
-             x:Name="RootPage"
              Title="Lista Zakupow">
   <ContentPage.BindingContext>
     <viewModels:ShoppingListViewModel />

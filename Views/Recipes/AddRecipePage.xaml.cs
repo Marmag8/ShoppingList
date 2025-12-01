@@ -31,7 +31,7 @@ public partial class AddRecipePage : ContentPage
 
     private void LoadIngredientCategories()
     {
-        (List<ListItemModel> itemsFromFile, List<string> categoriesFromFile) = Utils.FromXML();
+        List<string> categoriesFromFile = Utils.FromXML().Categories;
 
         List<String> categoriess = categoriesFromFile
             .Where(c => !string.IsNullOrWhiteSpace(c))
@@ -40,7 +40,7 @@ public partial class AddRecipePage : ContentPage
             .ToList();
 
         _ingredientCategories.Clear();
-        foreach (var c in categoriess)
+        foreach (string c in categoriess)
             _ingredientCategories.Add(c);
 
         IngredientCategoryPicker.ItemsSource = _ingredientCategories;
@@ -53,6 +53,7 @@ public partial class AddRecipePage : ContentPage
         int amount = int.TryParse(IngredientAmount.Text, out int val) ? val : 0;
         string unit = IngredientUnit.SelectedItem as string ?? "szt";
         string category = IngredientCategoryPicker.SelectedItem as string ?? "Inne";
+        bool isOptional = Optional.IsChecked;
 
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -65,7 +66,7 @@ public partial class AddRecipePage : ContentPage
             return;
         }
 
-        var item = new ListItemModel(name, amount, unit, category);
+        ListItemModel item = new ListItemModel(name, amount, unit, category, isOptional);
         _ingredients.Add(item);
 
         IngredientName.Text = string.Empty;

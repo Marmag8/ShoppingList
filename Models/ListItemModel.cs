@@ -7,6 +7,9 @@ namespace ShoppingList.Models
         [ObservableProperty]
         private bool isBought;
 
+        [ObservableProperty]
+        private bool isOptional;
+
         private string _name;
         public string Name
         {
@@ -41,6 +44,12 @@ namespace ShoppingList.Models
             Amount = amount;
             Unit = unit;
             Category = category;
+            IsOptional = false;
+        }
+
+        public ListItemModel(string name, int amount, string unit, string category, bool isOptional) : this(name, amount, unit, category)
+        {
+            IsOptional = isOptional;
         }
     }
 }

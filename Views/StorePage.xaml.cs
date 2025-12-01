@@ -97,12 +97,12 @@ public partial class StorePage : ContentPage, IQueryAttributable
             {
                 InsertSorted(item);
             }
-            var cats = _viewModel.Items
+            List<string> categories = _viewModel.Items
                 .Select(i => i.Category)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-            Utils.ToXML(_viewModel.Items.ToList(), cats);
+            Utils.ToXML(_viewModel.Items.ToList(), categories);
         }
         else if (e.PropertyName == nameof(ListItemModel.Category) ||
                  e.PropertyName == nameof(ListItemModel.Name))

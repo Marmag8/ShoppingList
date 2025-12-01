@@ -12,30 +12,31 @@ namespace ShoppingList.ViewModels
     {
         public ObservableCollection<ListItemModel> Items { get; } = new();
 
-        [ObservableProperty]
-        private ListItemModel? selectedItem;
-
         public ShoppingListViewModel()
         {
-            (List<ListItemModel> items, List<string> categories) = Utils.FromXML();
+            List<ListItemModel> items = Utils.FromXML().Items;
             foreach (ListItemModel item in items)
                 Items.Add(item);
+        }
+
+        private void UpdateDataFile()
+        {
+            IEnumerable<String> categories = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            Utils.ToXML(Items.ToList(), categories);
         }
 
         [RelayCommand]
         private void DeleteItem(ListItemModel item)
         {
             Items.Remove(item);
-            IEnumerable<String> categories = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            Utils.ToXML(Items.ToList(), categories);
+            UpdateDataFile();
         }
 
         [RelayCommand]
         private void AddItem(ListItemModel item)
         {
             Items.Add(item);
-            IEnumerable<String> categories = Items.Select(i => i.Category).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            Utils.ToXML(Items.ToList(), categories);
+            UpdateDataFile();
         }
     }
 }

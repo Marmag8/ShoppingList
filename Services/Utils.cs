@@ -15,6 +15,19 @@ namespace ShoppingList.Services
             "Inne"
         };
 
+        public static string GetAppDataPath()
+        {
+            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShoppingList");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            return dir;
+        }
+
+        public static string GetDataFilePath()
+        {
+            return Path.Combine(GetAppDataPath(), "itemList.xml");
+        }
+
         public static void ToXML(List<ListItemModel> items, IEnumerable<string> categories)
         {
             List<RecipeModel> recipes = FromRecipesXML();
@@ -23,11 +36,7 @@ namespace ShoppingList.Services
 
         public static void ToXML(List<ListItemModel> items, IEnumerable<string> categories, List<RecipeModel> recipes)
         {
-            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShoppingList");
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
-            string path = Path.Combine(dir, "itemList.xml");
+            string path = GetDataFilePath();
 
             List<string> mergedCategories = DefaultCategories
                 .Concat(categories ?? Array.Empty<string>())
@@ -87,6 +96,10 @@ namespace ShoppingList.Services
                     inCategory.InnerText = i.Category ?? "Inne";
                     ingNode.AppendChild(inCategory);
 
+                    XmlElement inOptional = doc.CreateElement("IsOptional");
+                    inOptional.InnerText = i.IsOptional.ToString();
+                    ingNode.AppendChild(inOptional);
+
                     ingredientsNode.AppendChild(ingNode);
                 }
 
@@ -121,6 +134,10 @@ namespace ShoppingList.Services
                 boughtNode.InnerText = i.IsBought.ToString();
                 itemNode.AppendChild(boughtNode);
 
+                XmlElement optionalNode = doc.CreateElement("IsOptional"); // NOWY węzeł
+                optionalNode.InnerText = i.IsOptional.ToString();
+                itemNode.AppendChild(optionalNode);
+
                 itemsNode.AppendChild(itemNode);
             }
             root.AppendChild(itemsNode);
@@ -130,8 +147,7 @@ namespace ShoppingList.Services
 
         public static (List<ListItemModel> Items, List<string> Categories) FromXML()
         {
-            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShoppingList");
-            string path = Path.Combine(dir, "itemList.xml");
+            string path = GetDataFilePath();
 
             var items = new List<ListItemModel>();
             var categories = new List<string>();
@@ -172,6 +188,9 @@ namespace ShoppingList.Services
                     if (bool.TryParse(itemNode.SelectSingleNode("IsBought")?.InnerText, out bool isBought))
                         item.IsBought = isBought;
 
+                    if (bool.TryParse(itemNode.SelectSingleNode("IsOptional")?.InnerText, out bool isOptional))
+                        item.IsOptional = isOptional;
+
                     items.Add(item);
 
                     if (!string.IsNullOrWhiteSpace(category) &&
@@ -189,8 +208,7 @@ namespace ShoppingList.Services
 
         public static List<RecipeModel> FromRecipesXML()
         {
-            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShoppingList");
-            string path = Path.Combine(dir, "itemList.xml");
+            string path = GetDataFilePath();
 
             var recipes = new List<RecipeModel>();
             if (!File.Exists(path))
@@ -199,7 +217,7 @@ namespace ShoppingList.Services
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
 
-            var recipeNodes = doc.SelectNodes("ShoppingList/Recipes/Recipe");
+            XmlNodeList recipeNodes = doc.SelectNodes("ShoppingList/Recipes/Recipe");
             if (recipeNodes == null) return recipes;
 
             foreach (XmlNode rNode in recipeNodes)
@@ -207,8 +225,8 @@ namespace ShoppingList.Services
                 string name = rNode.SelectSingleNode("Name")?.InnerText ?? "Bez nazwy";
                 string category = rNode.SelectSingleNode("Category")?.InnerText ?? "Inne";
 
-                var ingredients = new List<ListItemModel>();
-                var ingNodes = rNode.SelectNodes("Ingredients/Ingredient");
+                List<ListItemModel> ingredients = new List<ListItemModel>();
+                XmlNodeList ingNodes = rNode.SelectNodes("Ingredients/Ingredient");
                 if (ingNodes != null)
                 {
                     foreach (XmlNode ingNode in ingNodes)
@@ -217,7 +235,12 @@ namespace ShoppingList.Services
                         int inAmount = int.TryParse(ingNode.SelectSingleNode("Amount")?.InnerText, out int val) ? val : 0;
                         string inUnit = ingNode.SelectSingleNode("Unit")?.InnerText ?? "szt";
                         string inCategory = ingNode.SelectSingleNode("Category")?.InnerText ?? "Inne";
-                        ingredients.Add(new ListItemModel(inName, inAmount, inUnit, inCategory));
+
+                        ListItemModel ingItem = new ListItemModel(inName, inAmount, inUnit, inCategory);
+                        if (bool.TryParse(ingNode.SelectSingleNode("IsOptional")?.InnerText, out bool ingOptional))
+                            ingItem.IsOptional = ingOptional;
+
+                        ingredients.Add(ingItem);
                     }
                 }
 

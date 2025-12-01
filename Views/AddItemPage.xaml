@@ -23,6 +23,12 @@
         </HorizontalStackLayout>
         <Label Text="Wybierz kategorię:" />
         <Picker x:Name="Category" HeightRequest="20" />
+
+        <HorizontalStackLayout Spacing="4">
+            <CheckBox x:Name="Optional" />
+            <Label Text="Opcjonalne" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
         <Button Text="Dodaj Produkt" Clicked="OnConfirm" />
     </VerticalStackLayout>
 </ContentPage>

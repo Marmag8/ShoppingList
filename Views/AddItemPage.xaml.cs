@@ -5,7 +5,7 @@ namespace ShoppingList.Views;
 
 public partial class AddItemPage : ContentPage
 {
-    public Action<string, int, string, string>? OnItemAdded;
+    public Action<string, int, string, string, bool>? OnItemAdded;
     private List<string> _categories = new();
 
     public AddItemPage()
@@ -13,14 +13,13 @@ public partial class AddItemPage : ContentPage
         InitializeComponent();
         Unit.SelectedIndex = 5;
 
-        (List<ListItemModel> itemsFromFile, List<string> categoriesFromFile) = Utils.FromXML();
+        List<string> categoriesFromFile = Utils.FromXML().Categories;
 
         _categories = categoriesFromFile
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        _categories = _categories.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         _categories.Add("Nowa...");
 
         Category.ItemsSource = _categories;
@@ -49,7 +48,7 @@ public partial class AddItemPage : ContentPage
             Category.ItemsSource = _categories;
             Category.SelectedItem = newCategory;
 
-            (List<ListItemModel> itemsFromFile, List<string> categoriesFromFile) = Utils.FromXML();
+            List<ListItemModel> itemsFromFile = Utils.FromXML().Items;
             List<String> categoriesToSave = _categories.Where(c => c != "Nowa...").Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             Utils.ToXML(itemsFromFile, categoriesToSave);
         }
@@ -61,8 +60,9 @@ public partial class AddItemPage : ContentPage
         int amount = int.TryParse(Amount.Text, out int val) ? val : 0;
         string unit = Unit.SelectedItem as string ?? "szt";
         string category = Category.SelectedItem as string ?? "Inne";
+        bool isOptional = Optional.IsChecked;
 
-        OnItemAdded?.Invoke(name, amount, unit, category);
+        OnItemAdded?.Invoke(name, amount, unit, category, isOptional);
 
         await Navigation.PopModalAsync();
     }
