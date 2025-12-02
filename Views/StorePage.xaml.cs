@@ -7,10 +7,12 @@ using ShoppingList.ViewModels;
 
 namespace ShoppingList.Views;
 
-public partial class StorePage : ContentPage, IQueryAttributable
+public partial class StorePage : ContentPage
 {
     private readonly ShoppingListViewModel _viewModel;
     private readonly ObservableCollection<ListItemModel> _storeItems = new();
+    private string _store;
+    private string _sorting;
 
     public StorePage(ShoppingListViewModel vm)
     {
@@ -33,28 +35,70 @@ public partial class StorePage : ContentPage, IQueryAttributable
     {
         base.OnAppearing();
 
+        Store.SelectedItem = "Dowolny";
+        Sorting.SelectedItem = "Według Kategorii";
         RebuildStoreItems();
-    }
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.ContainsKey("store"))
-        {
-            String storeName = query["store"].ToString();
-            // jakas inna logika
-        }
     }
 
     private void RebuildStoreItems()
     {
         _storeItems.Clear();
-        foreach (ListItemModel item in _viewModel.Items
-                     .Where(i => !i.IsBought)
-                     .OrderBy(i => i.Category, StringComparer.OrdinalIgnoreCase)
-                     .ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+
+        List <ListItemModel> items = new();
+
+        switch (_store)
         {
-            _storeItems.Add(item);
+            case "Dowolny":
+                items = _viewModel.Items.ToList();
+                break;
+            case "Biedronka":
+                items = _viewModel.Items.Where(i => i.Store == "Biedronka" || i.Store == "Dowolny").ToList();
+                break;
+            case "Lidl":
+                items = _viewModel.Items.Where(i => i.Store == "Lidl" || i.Store == "Dowolny").ToList();
+                break;
+            case "Selgros":
+                items = _viewModel.Items.Where(i => i.Store == "Selgros" || i.Store == "Dowolny").ToList();
+                break;
+            case "Carrefour":
+                items = _viewModel.Items.Where(i => i.Store == "Carrefour" || i.Store == "Dowolny").ToList();
+                break;
+            case "Kaufland":
+                items = _viewModel.Items.Where(i => i.Store == "Kaufland" || i.Store == "Dowolny").ToList();
+                break;
+            default:
+                items = _viewModel.Items.ToList();
+                break;
         }
+            
+        switch (_sorting)
+        {
+            case "category":
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                {
+                    _storeItems.Add(item);
+                }
+                break;
+            case "name":
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderByDescending(i => i.Name, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Category, StringComparer.OrdinalIgnoreCase))
+                {
+                    _storeItems.Add(item);
+                }
+                break;
+            case "amount":
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Amount).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                {
+                    _storeItems.Add(item);
+                }
+                break;
+            default:
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                {
+                    _storeItems.Add(item);
+                }
+                break;
+        }
+        
     }
 
     private void OnItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -127,6 +171,25 @@ public partial class StorePage : ContentPage, IQueryAttributable
             index++;
         }
         _storeItems.Insert(index, item);
+    }
+
+    private void OnStoreChanged(object sender, EventArgs e)
+    {
+        _store = Store.SelectedItem as string ?? "Dowolny";
+        RebuildStoreItems();
+    }
+
+    private void OnSortingChanged(object sender, EventArgs e)
+    {
+        string selected = Sorting.SelectedItem as string;
+        _sorting = selected switch
+        {
+            "Według Kategorii" => "category",
+            "Według Nazwy" => "name",
+            "Według Ilości" => "amount",
+            _ => "category"
+        };
+        RebuildStoreItems();
     }
 
     private async void Return(object sender, EventArgs e)

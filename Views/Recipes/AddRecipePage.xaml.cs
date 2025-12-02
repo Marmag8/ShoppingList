@@ -20,6 +20,7 @@ public partial class AddRecipePage : ContentPage
 
         IngredientUnit.SelectedIndex = 5; // sztuki
         RecipeCategory.SelectedIndex = 1; // dania glowne
+        IngredientStore.SelectedIndex = 0; // dowolny
 
         LoadIngredientCategories();
     }
@@ -33,7 +34,7 @@ public partial class AddRecipePage : ContentPage
     {
         List<string> categoriesFromFile = Utils.FromXML().Categories;
 
-        List<String> categoriess = categoriesFromFile
+        List<string> categoriess = categoriesFromFile
             .Where(c => !string.IsNullOrWhiteSpace(c))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
@@ -43,8 +44,8 @@ public partial class AddRecipePage : ContentPage
         foreach (string c in categoriess)
             _ingredientCategories.Add(c);
 
-        IngredientCategoryPicker.ItemsSource = _ingredientCategories;
-        IngredientCategoryPicker.SelectedIndex = _ingredientCategories.IndexOf("Inne") >= 0 ? _ingredientCategories.IndexOf("Inne") : 0;
+        IngredientCategory.ItemsSource = _ingredientCategories;
+        IngredientCategory.SelectedIndex = _ingredientCategories.IndexOf("Inne") >= 0 ? _ingredientCategories.IndexOf("Inne") : 0;
     }
 
     private async void OnAddIngredient(object sender, EventArgs e)
@@ -52,8 +53,9 @@ public partial class AddRecipePage : ContentPage
         string name = IngredientName.Text?.Trim() ?? string.Empty;
         int amount = int.TryParse(IngredientAmount.Text, out int val) ? val : 0;
         string unit = IngredientUnit.SelectedItem as string ?? "szt";
-        string category = IngredientCategoryPicker.SelectedItem as string ?? "Inne";
+        string category = IngredientCategory.SelectedItem as string ?? "Inne";
         bool isOptional = Optional.IsChecked;
+        string store = IngredientStore.SelectedItem as string ?? "Dowolny";
 
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -66,13 +68,14 @@ public partial class AddRecipePage : ContentPage
             return;
         }
 
-        ListItemModel item = new ListItemModel(name, amount, unit, category, isOptional);
+        ListItemModel item = new ListItemModel(name, amount, unit, category, isOptional, store);
         _ingredients.Add(item);
 
         IngredientName.Text = string.Empty;
         IngredientAmount.Text = string.Empty;
         IngredientUnit.SelectedIndex = 5;
-        IngredientCategoryPicker.SelectedIndex = _ingredientCategories.IndexOf("Inne") >= 0 ? _ingredientCategories.IndexOf("Inne") : 0;
+        IngredientCategory.SelectedIndex = _ingredientCategories.IndexOf("Inne") >= 0 ? _ingredientCategories.IndexOf("Inne") : 0;
+        IngredientStore.SelectedIndex = 0;
     }
 
     private void OnRemoveIngredient(object sender, EventArgs e)

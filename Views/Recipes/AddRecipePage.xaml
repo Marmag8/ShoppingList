@@ -27,25 +27,38 @@
             <CheckBox x:Name="Optional" />
             <Label Text="Opcjonalne" VerticalOptions="Center" />
         </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="6">
-                <Entry x:Name="IngredientAmount" Placeholder="Ilosc" Keyboard="Numeric"  WidthRequest="70" />
-                <Picker x:Name="IngredientUnit" WidthRequest="70">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>mg</x:String>
-                            <x:String>g</x:String>
-                            <x:String>kg</x:String>
-                            <x:String>ml</x:String>
-                            <x:String>l</x:String>
-                            <x:String>szt</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-                <Picker x:Name="IngredientCategoryPicker"
-                    WidthRequest="110" />
-                <Button Text="Dodaj" Clicked="OnAddIngredient" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+        <HorizontalStackLayout Spacing="6">
+            <Entry x:Name="IngredientAmount" Placeholder="Ilosc" Keyboard="Numeric"  WidthRequest="70" />
+            <Picker x:Name="IngredientUnit" WidthRequest="70">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>mg</x:String>
+                        <x:String>g</x:String>
+                        <x:String>kg</x:String>
+                        <x:String>ml</x:String>
+                        <x:String>l</x:String>
+                        <x:String>szt</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+            <Picker x:Name="IngredientCategory" WidthRequest="110" />
+
+            <Picker x:Name="IngredientStore" WidthRequest="120">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Dowolny</x:String>
+                        <x:String>Biedronka</x:String>
+                        <x:String>Lidl</x:String>
+                        <x:String>Selgros</x:String>
+                        <x:String>Carrefour</x:String>
+                        <x:String>Kaufland</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Button Text="Dodaj" Clicked="OnAddIngredient" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
 
     <CollectionView x:Name="IngredientsCollection"
                     SelectionMode="None"

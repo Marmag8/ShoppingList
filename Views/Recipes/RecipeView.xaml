@@ -31,8 +31,16 @@
                     x:Name="AddButton"
                     HorizontalOptions="Start" />
 
-            <Label x:Name="ResultLabel" Text="Dodano Pomyślnie" TextColor="LawnGreen" IsVisible="False"></Label>
-        </HorizontalStackLayout>
+            <Label x:Name="ResultLabel" IsVisible="False">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Dodano" TextColor="LawnGreen" />
+                        <Span Text="&#x0a;" /> <!-- nowa linia bo LineBreak nie dziala -->
+                        <Span Text="Pomyślnie" TextColor="LawnGreen" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            </HorizontalStackLayout>
       
     </VerticalStackLayout>
   </Border>

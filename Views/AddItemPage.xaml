@@ -21,8 +21,23 @@
                 </Picker.ItemsSource>
             </Picker>
         </HorizontalStackLayout>
+
         <Label Text="Wybierz kategorię:" />
         <Picker x:Name="Category" HeightRequest="20" />
+
+        <Label Text="Wybierz sklep:" />
+        <Picker x:Name="Store" HeightRequest="20">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Dowolny</x:String>
+                    <x:String>Biedronka</x:String>
+                    <x:String>Lidl</x:String>
+                    <x:String>Selgros</x:String>
+                    <x:String>Carrefour</x:String>
+                    <x:String>Kaufland</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
 
         <HorizontalStackLayout Spacing="4">
             <CheckBox x:Name="Optional" />

@@ -31,18 +31,30 @@ namespace ShoppingList.Views
 
         private void DeleteItem(object sender, EventArgs e)
         {
-            if (sender is MenuFlyoutItem item && item.CommandParameter is ListItemModel model)
+            ListItemModel? model =
+                (sender as MenuFlyoutItem)?.CommandParameter as ListItemModel
+                ?? (sender as Button)?.CommandParameter as ListItemModel;
+
+            if (model is null)
+                return;
+
+            if (ParentViewModel.DeleteItemCommand.CanExecute(model))
+                ParentViewModel.DeleteItemCommand.Execute(model);
+            else
             {
-                if (ParentViewModel.DeleteItemCommand.CanExecute(model))
-                    ParentViewModel.DeleteItemCommand.Execute(model);
-                else
+                if (ParentViewModel.Items.Contains(model))
                 {
-                    if (ParentViewModel.Items.Contains(model))
-                    {
-                        ParentViewModel.Items.Remove(model);
-                        UpdateDataFile();
-                    }
+                    ParentViewModel.Items.Remove(model);
+                    UpdateDataFile();
                 }
+            }
+        }
+
+        private void OnBoughtChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.BindingContext is ListItemModel model)
+            {
+                UpdateDataFile();
             }
         }
 

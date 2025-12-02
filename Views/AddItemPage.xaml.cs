@@ -5,7 +5,7 @@ namespace ShoppingList.Views;
 
 public partial class AddItemPage : ContentPage
 {
-    public Action<string, int, string, string, bool>? OnItemAdded;
+    public Action<string, int, string, string, bool, string>? OnItemAdded;
     private List<string> _categories = new();
 
     public AddItemPage()
@@ -25,6 +25,8 @@ public partial class AddItemPage : ContentPage
         Category.ItemsSource = _categories;
         Category.SelectedIndex = 0;
         Category.SelectedIndexChanged += Category_SelectedIndexChanged;
+
+        Store.SelectedIndex = 0;
     }
 
     private async void Category_SelectedIndexChanged(object? sender, EventArgs e)
@@ -40,7 +42,7 @@ public partial class AddItemPage : ContentPage
 
             if (!_categories.Contains(newCategory, StringComparer.OrdinalIgnoreCase))
             {
-                int index = _categories.Count - 1; 
+                int index = _categories.Count - 1;
                 _categories.Insert(index, newCategory);
             }
 
@@ -49,7 +51,7 @@ public partial class AddItemPage : ContentPage
             Category.SelectedItem = newCategory;
 
             List<ListItemModel> itemsFromFile = Utils.FromXML().Items;
-            List<String> categoriesToSave = _categories.Where(c => c != "Nowa...").Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            List<string> categoriesToSave = _categories.Where(c => c != "Nowa...").Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             Utils.ToXML(itemsFromFile, categoriesToSave);
         }
     }
@@ -61,8 +63,9 @@ public partial class AddItemPage : ContentPage
         string unit = Unit.SelectedItem as string ?? "szt";
         string category = Category.SelectedItem as string ?? "Inne";
         bool isOptional = Optional.IsChecked;
+        string store = Store.SelectedItem as string ?? "Dowolny";
 
-        OnItemAdded?.Invoke(name, amount, unit, category, isOptional);
+        OnItemAdded?.Invoke(name, amount, unit, category, isOptional, store);
 
         await Navigation.PopModalAsync();
     }

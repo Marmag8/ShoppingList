@@ -1,10 +1,7 @@
-using CommunityToolkit.Maui.Storage;
-using Microsoft.Maui.Storage;
 using ShoppingList.Models;
 using ShoppingList.Services;
 using ShoppingList.ViewModels;
 using System.Collections.Specialized;
-using System.IO;
 
 namespace ShoppingList.Views
 {
@@ -38,9 +35,9 @@ namespace ShoppingList.Views
         {
             AddItemPage addItemPage = new AddItemPage
             {
-                OnItemAdded = (name, amount, unit, category, isOptional) =>
+                OnItemAdded = (name, amount, unit, category, isOptional, store) =>
                 {
-                    ListItemModel item = new ListItemModel(name, amount, unit, category, isOptional);
+                    ListItemModel item = new ListItemModel(name, amount, unit, category, isOptional, store);
                     if (viewModel.AddItemCommand?.CanExecute(item) ?? false)
                         viewModel.AddItemCommand.Execute(item);
                     else
@@ -84,11 +81,7 @@ namespace ShoppingList.Views
 
         private async void OpenStorePage(object sender, EventArgs e)
         {
-            string? storeName = await DisplayPromptAsync("Generuj Listê", "Podaj nazwê sklepu, do którego chcesz wygenerowaæ listê (zostaw puste, aby wygenerowaæ listê wszystkich produktów):");
-            if (storeName == String.Empty)
-                await Shell.Current.GoToAsync($"{nameof(StorePage)}");
-            else
-                await Shell.Current.GoToAsync($"{nameof(StorePage)}?store={storeName}");
+            await Shell.Current.GoToAsync($"{nameof(StorePage)}");
         }
 
         private async void OnImportClicked(object sender, EventArgs e)

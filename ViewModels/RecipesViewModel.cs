@@ -30,7 +30,7 @@ namespace ShoppingList.ViewModels
         {
             _shoppingListViewModel = shoppingListViewModel ?? throw new ArgumentNullException(nameof(shoppingListViewModel));
 
-            List<String> categories = _shoppingListViewModel.Items
+            List<string> categories = _shoppingListViewModel.Items
                 .Select(i => i.Category)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -40,7 +40,7 @@ namespace ShoppingList.ViewModels
                 Recipes.Add(r);
 
             if (Recipes.Count == 0)
-                PopulateRecipes(); 
+                PopulateRecipes();
 
             if (Recipes is INotifyCollectionChanged collection)
                 collection.CollectionChanged += (sender, args) => Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
@@ -55,10 +55,10 @@ namespace ShoppingList.ViewModels
                 "Przystawki",
                 new[]
                 {
-                    new ListItemModel("Pomidor", 2, "szt", "Warzywa", false),
-                    new ListItemModel("Ogórek", 1, "szt", "Warzywa", true),
-                    new ListItemModel("Feta", 200, "g", "Mleczne", false),
-                    new ListItemModel("Oliwki", 150, "g", "Inne", true)
+                    new ListItemModel("Pomidor", 2, "szt", "Warzywa", true, "Kaufland"),
+                    new ListItemModel("Ogórek", 1, "szt", "Warzywa", false, "Biedronka"),
+                    new ListItemModel("Feta", 200, "g", "Mleczne", false, "Lidl"),
+                    new ListItemModel("Oliwki", 150, "g", "Inne", true, "Carrefour")
                 }));
 
             Recipes.Add(new RecipeModel(
@@ -66,10 +66,30 @@ namespace ShoppingList.ViewModels
                 "Dania G³ówne",
                 new[]
                 {
-                    new ListItemModel("Makaron spaghetti", 500, "g", "Inne", false),
-                    new ListItemModel("Miêso mielone", 400, "g", "Miêso", false),
-                    new ListItemModel("Pomidory krojone", 400, "g", "Warzywa", false),
-                    new ListItemModel("Cebula", 1, "szt", "Warzywa", true)
+                    new ListItemModel("Makaron spaghetti", 500, "g", "Inne", false, "Lidl"),
+                    new ListItemModel("Miêso mielone", 400, "g", "Miêso", true, "Selgros"),
+                    new ListItemModel("Pomidory krojone", 400, "g", "Warzywa", false, "Biedronka"),
+                    new ListItemModel("Cebula", 1, "szt", "Warzywa", true, "Carrefour")
+                }));
+
+            Recipes.Add(new RecipeModel(
+                "Ciasto Czekoladowe",
+                "Desery",
+                new[]
+                {
+                    new ListItemModel("M¹ka", 500, "g", "Inne", false, "Dowolny"),
+                    new ListItemModel("Czekolada", 100, "g", "Mleczne", false, "Dowolny"),
+                    new ListItemModel("Mleko", 500, "ml", "Mleczne", false, "Dowolny"),
+                    new ListItemModel("Jajka", 2, "szt", "Inne", false, "Dowolny"),
+                }));
+
+            Recipes.Add(new RecipeModel(
+                "Woda",
+                "Napoje",
+                new[]
+                {
+                    new ListItemModel("Woda", 300, "ml", "Picie", false, "Kaufland"),
+                    new ListItemModel("Szklanka", 1, "szt", "Inne", true, "Selgros"),
                 }));
         }
 
@@ -81,7 +101,7 @@ namespace ShoppingList.ViewModels
 
             foreach (ListItemModel ingredient in recipe.Ingredients)
             {
-                var existing = _shoppingListViewModel.Items.FirstOrDefault(i =>
+                ListItemModel? existing = _shoppingListViewModel.Items.FirstOrDefault(i =>
                     i.Name == ingredient.Name &&
                     i.Unit == ingredient.Unit &&
                     i.Category == ingredient.Category);
@@ -91,15 +111,17 @@ namespace ShoppingList.ViewModels
                     existing.Amount += ingredient.Amount;
                     if (ingredient.IsOptional && !existing.IsOptional)
                         existing.IsOptional = true;
+                    if (string.IsNullOrWhiteSpace(existing.Store) && !string.IsNullOrWhiteSpace(ingredient.Store))
+                        existing.Store = ingredient.Store;
                 }
                 else
                 {
                     _shoppingListViewModel.Items.Add(
-                        new ListItemModel(ingredient.Name, ingredient.Amount, ingredient.Unit, ingredient.Category, ingredient.IsOptional));
+                        new ListItemModel(ingredient.Name, ingredient.Amount, ingredient.Unit, ingredient.Category, ingredient.IsOptional, ingredient.Store));
                 }
             }
 
-            List<String> categories = _shoppingListViewModel.Items
+            List<string> categories = _shoppingListViewModel.Items
                 .Select(i => i.Category)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -116,13 +138,13 @@ namespace ShoppingList.ViewModels
                 ? data.Category
                 : "Przystawki";
 
-            List<String> categories = _shoppingListViewModel.Items
+            List<string> categories = _shoppingListViewModel.Items
                 .Select(i => i.Category)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            Recipes.Add(new RecipeModel(name, category, data.Ingredients ?? Array.Empty<ListItemModel>()));
+            Recipes.Add(new RecipeModel(name, category, data.Ingredients));
             Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
         }
     }

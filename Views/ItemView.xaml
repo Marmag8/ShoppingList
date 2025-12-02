@@ -30,33 +30,55 @@
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
 
-      <VerticalStackLayout Spacing="6">
-            <HorizontalStackLayout Spacing="12">
-                <Label Text="{Binding Name}"
-                       FontSize="18"
-                       FontAttributes="Bold">
-                  <Label.Triggers>
-                      <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
-                          <Setter Property="TextDecorations" Value="Strikethrough" />
-                          <Setter Property="TextColor" Value="{AppThemeBinding Light='#808080', Dark='#B0B0B0'}" />
-                      </DataTrigger>
-                  </Label.Triggers>
-              </Label>
+      <Grid ColumnDefinitions="Auto, *">
+            <VerticalStackLayout Spacing="6" Grid.Column="0">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="{Binding Name}"
+                 FontSize="18"
+                 FontAttributes="Bold">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
+                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light='#808080', Dark='#B0B0B0'}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
 
-              <Border Padding="6,2"
-                      BackgroundColor="{AppThemeBinding Light='#E8F0FE', Dark='#2A3B58'}"
-                      Stroke="{AppThemeBinding Light='#C7D2FE', Dark='#3B4E78'}"
-                      StrokeThickness="1"
-                      IsVisible="{Binding IsOptional}">
-                  <Label Text="Opcjonalne"
-                         FontSize="12"
-                         TextColor="{AppThemeBinding Light='#1F3B82', Dark='#DCE7FF'}"
-                         HorizontalOptions="Start" />
-              </Border>
-          </HorizontalStackLayout>
+                    <Border Padding="6,2"
+                BackgroundColor="{AppThemeBinding Light='#E8F0FE', Dark='#2A3B58'}"
+                Stroke="{AppThemeBinding Light='#C7D2FE', Dark='#3B4E78'}"
+                StrokeThickness="1"
+                IsVisible="{Binding IsOptional}">
+                        <Label Text="Opcjonalne"
+                   FontSize="12"
+                   TextColor="{AppThemeBinding Light='#1F3B82', Dark='#DCE7FF'}"
+                   HorizontalOptions="Start" />
+                    </Border>
+                </HorizontalStackLayout>
 
-            <HorizontalStackLayout Spacing="0">
-                <Label Text="{Binding Amount, StringFormat='Ilosc: {0}'}" >
+                <HorizontalStackLayout Spacing="0">
+                    <Label Text="{Binding Amount, StringFormat='Ilosc: {0}'}" >
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
+                                <Setter Property="TextColor" Value="Gray"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="False">
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label Text="{Binding Unit, StringFormat='{0}'}" >
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
+                                <Setter Property="TextColor" Value="Gray"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="False">
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </HorizontalStackLayout>
+                <Label Text="{Binding Store, StringFormat='Sklep: {0}'}" >
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
                             <Setter Property="TextColor" Value="Gray"/>
@@ -66,17 +88,23 @@
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
-                <Label Text="{Binding Unit, StringFormat='{0}'}" >
-                    <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="True">
-                            <Setter Property="TextColor" Value="Gray"/>
-                        </DataTrigger>
-                        <DataTrigger TargetType="Label" Binding="{Binding IsBought}" Value="False">
-                            <Setter Property="TextColor" Value="White"/>
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center">
+                <HorizontalStackLayout>
+                    <Label Text="Kupione"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End"
+                           Margin="0,0,5,0"/>
+                    <CheckBox IsChecked="{Binding IsBought}" CheckedChanged="OnBoughtChanged" />
+                </HorizontalStackLayout>
+                
+                <Button Text="Usuń"
+                        Clicked="DeleteItem"
+                        CommandParameter="{Binding .}"
+                        HorizontalOptions="End"/>
+            </VerticalStackLayout>
+        </Grid>
   </Border>
 </ContentView>

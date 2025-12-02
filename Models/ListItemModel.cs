@@ -38,6 +38,13 @@ namespace ShoppingList.Models
             set => _category = value;
         }
 
+        private string _store = string.Empty;
+        public string Store
+        {
+            get => _store;
+            set => _store = value ?? string.Empty;
+        }
+
         public ListItemModel(string name, int amount, string unit, string category)
         {
             Name = name;
@@ -45,11 +52,17 @@ namespace ShoppingList.Models
             Unit = unit;
             Category = category;
             IsOptional = false;
+            Store = string.Empty;
         }
 
         public ListItemModel(string name, int amount, string unit, string category, bool isOptional) : this(name, amount, unit, category)
         {
             IsOptional = isOptional;
+        }
+
+        public ListItemModel(string name, int amount, string unit, string category, bool isOptional, string store) : this(name, amount, unit, category, isOptional)
+        {
+            Store = store;
         }
     }
 }

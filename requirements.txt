@@ -1,4 +1,4 @@
-Celem zadania jest przygotowanie aplikacji w .NET MAUI "Lista zakupów"
+Celem zadania jest przygotowanie aplikacji w .NET MAUI "Lista zakupów" y
 Wymagania na ocenê dopuszczaj¹c¹: y
 -Aplikacja musi przechowywaæ dane na temat listy zakupów w formie plików. (nie .TXT) y
 -Aplikacja musi byæ zgodna z tematem zadania tj. "Lista zakupów" y
@@ -16,15 +16,15 @@ Wymagania na ocenê dostateczn¹: y
 - Ka¿da kategoria powinna byæ zaprezentowana w formie ContentView i mieæ mo¿liwoœæ rozwiniêcia kategorii w celu zobaczenia produktów z tej kategorii. y
 -Ka¿dy produkt musi byæ przypisany do jakiejœ kategorii ju¿ istniej¹cej. y
 
-Wymagania na wy¿sze oceny (na ocenê Dobr¹ musz¹ zostaæ zrealizowane 2 wymagania z poni¿szych, na Bardzo Dobr¹ - 4, a na celuj¹c¹ 6), przy czym wymagania 6. nie mo¿na wykonaæ jeœli wymaganie 1 lub 3 nie zosta³o zrealizowane: n
+Wymagania na wy¿sze oceny (na ocenê Dobr¹ musz¹ zostaæ zrealizowane 2 wymagania z poni¿szych, na Bardzo Dobr¹ - 4, a na celuj¹c¹ 6), przy czym wymagania 6. nie mo¿na wykonaæ jeœli wymaganie 1 lub 3 nie zosta³o zrealizowane: y
 1. Mo¿liwoœæ generowania/prze³¹czania widoku "Listy do sklepu" w której bêd¹ pokazane tylko produkty nieoznaczone jako kupione oraz bez podzia³u na kategorie, ale po kategoriach posortowane.
    W momencie zaznaczenia elementu jako kupiony powinien on znikn¹æ z tego widoku a na liœcie z kategoriami powinien byæ zaznaczony jako kupiony. y
 2. Mo¿liwoœæ eksportu pliku do podzielnia siê list¹ zakupow¹ z innym u¿ytkownikiem (funkcjonalnoœæ exportu i importu) y
-3. Mo¿liwoœæ oznaczenia sklepu w jakim dany produkt u¿ytkownik chce kupiæ (Biedronka, Selgros itp.) i generowania widoku listy tylko dla tego konkretnego sklepu. n
+3. Mo¿liwoœæ oznaczenia sklepu w jakim dany produkt u¿ytkownik chce kupiæ (Biedronka, Selgros itp.) i generowania widoku listy tylko dla tego konkretnego sklepu. y
 4. Mo¿liwoœæ oznaczenia w czytelny sposób, ¿e dany produkt w liœcie zakupowej jest opcjonalny. y
 5. Zak³adka z przepisami, w której mo¿emy importowaæ z przepisu potrzebne sk³adniki do listy zakupów (Wraz z mo¿liwoœci¹ dodawania nowych przepisów, i przynajmniej dwoma predefiniowanymi przepisami) y
-6. Mo¿liwoœæ wyboru sortowania produktów po kategoriach (w przypadku list ju¿ wygenerowanych do konkretnego sklepu lub listy produktów niekupionych), po nazwie, po iloœci. n
+6. Mo¿liwoœæ wyboru sortowania produktów po kategoriach (w przypadku list ju¿ wygenerowanych do konkretnego sklepu lub listy produktów niekupionych), po nazwie, po iloœci. y
 
-checkbox do oznaczania jako kupione i button do usuwania i itemview dla telefonow (zostawic w contextmenu tez) n
-zamienic zapis do xml zeby uzywal linq n
+checkbox do oznaczania jako kupione i button do usuwania i itemview dla telefonow (zostawic w contextmenu tez) y
+zamienic zapis do xml zeby uzywal linq y
 zwiekszanie i zmniejszanie ilosci o 1 poprzez + i - w context menu y
