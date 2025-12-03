@@ -122,5 +122,11 @@ namespace ShoppingList.Views
                 await DisplayAlert("Eksport", $"B³¹d eksportu: {ex.Message}", "OK");
             }
         }
+
+        private void ClearList(object sender, EventArgs e)
+        {
+            viewModel.Items.Clear();
+            UpdateDataFile();
+        }
     }
 }

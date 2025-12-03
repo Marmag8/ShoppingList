@@ -74,7 +74,7 @@ public partial class StorePage : ContentPage
         switch (_sorting)
         {
             case "category":
-                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderByDescending(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
                 {
                     _storeItems.Add(item);
                 }
@@ -86,13 +86,13 @@ public partial class StorePage : ContentPage
                 }
                 break;
             case "amount":
-                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Amount).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderByDescending(i => i.Amount).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
                 {
                     _storeItems.Add(item);
                 }
                 break;
             default:
-                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderBy(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
+                foreach (ListItemModel item in items.Where(i => !i.IsBought).OrderByDescending(i => i.Category, StringComparer.OrdinalIgnoreCase).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase))
                 {
                     _storeItems.Add(item);
                 }

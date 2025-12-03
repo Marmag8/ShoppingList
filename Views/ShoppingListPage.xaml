@@ -21,6 +21,7 @@
                 <Button Text="Generuj Listę do Sklepu" Clicked="OpenStorePage" HeightRequest="50" />
                 <Button Text="Importuj (*.xml)" Clicked="OnImportClicked" HeightRequest="50" />
                 <Button Text="Eksportuj (*.xml)" Clicked="OnExportClicked" HeightRequest="50" />
+                <Button Text="Wyczyść Listę" Clicked="ClearList" HeightRequest="50" />
             </HorizontalStackLayout>
         </ScrollView>
 

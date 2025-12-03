@@ -14,7 +14,7 @@ namespace ShoppingList.Services
             using FileStream readStream = File.OpenRead(appPath);
 
             FileSaverResult result = await FileSaver.Default.SaveAsync(
-                "ShoppingList.xml",
+                $"ShoppingList{DateTime.Now.ToFileTime()}.xml",
                 readStream,
                 CancellationToken.None);
 
