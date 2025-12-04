@@ -6,8 +6,9 @@
              x:DataType="models:RecipeModel">
   <Border Padding="10" Margin="5" StrokeThickness="1" Stroke="#DDD" BackgroundColor="{DynamicResource PageBackgroundColor}">
     <VerticalStackLayout Spacing="6">
-            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
-            <Label Text="Składniki:" FontAttributes="Bold" FontSize="14" />
+      <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+      <Label Text="{Binding Description}" FontSize="14" />
+      <Label Text="Składniki:" FontAttributes="Bold" FontSize="14" />
 
       <VerticalStackLayout Spacing="4"
                            BindableLayout.ItemsSource="{Binding Ingredients}">
@@ -29,6 +30,7 @@
         <HorizontalStackLayout Spacing="12">
             <Button Text="Dodaj składniki do listy"
                     x:Name="AddButton"
+                    Clicked="OnAddClicked"
                     HorizontalOptions="Start" />
 
             <Label x:Name="ResultLabel" IsVisible="False">

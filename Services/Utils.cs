@@ -59,6 +59,7 @@ namespace ShoppingList.Services
                     new XElement(
                         "Recipe",
                         new XElement("Name", recipe.Name),
+                        new XElement("Description", recipe.Description),
                         new XElement("Category", string.IsNullOrWhiteSpace(recipe.Category) ? "Inne" : recipe.Category),
                         new XElement(
                             "Ingredients",
@@ -186,6 +187,7 @@ namespace ShoppingList.Services
             foreach (XElement recipeElement in recipeNodes)
             {
                 string name = (recipeElement.Element("Name")?.Value ?? "Bez nazwy").Trim();
+                string description = (recipeElement.Element("Description")?.Value ?? "Brak opisu").Trim();
                 string category = (recipeElement.Element("Category")?.Value ?? "Inne").Trim();
 
                 IEnumerable<XElement> ingredientNodes = recipeElement.Element("Ingredients")?.Elements("Ingredient") ?? Enumerable.Empty<XElement>();
@@ -210,7 +212,7 @@ namespace ShoppingList.Services
                     return ingredientItem;
                 }).ToList();
 
-                RecipeModel recipe = new RecipeModel(name, category, ingredients);
+                RecipeModel recipe = new RecipeModel(name, description, category, ingredients);
                 recipes.Add(recipe);
             }
 

@@ -52,6 +52,7 @@ namespace ShoppingList.ViewModels
 
             Recipes.Add(new RecipeModel(
                 "Sa³atka Grecka",
+                "Przyk³adowe instrukcje przygotowania sa³atki greckiej",
                 "Przystawki",
                 new[]
                 {
@@ -63,6 +64,7 @@ namespace ShoppingList.ViewModels
 
             Recipes.Add(new RecipeModel(
                 "Spaghetti Bolognese",
+                "Przyk³adowe instrukcje przygotowania spaghetti bolognese",
                 "Dania G³ówne",
                 new[]
                 {
@@ -74,6 +76,7 @@ namespace ShoppingList.ViewModels
 
             Recipes.Add(new RecipeModel(
                 "Ciasto Czekoladowe",
+                "Przyk³adowe instrukcje przygotowania ciasta czekoladowego",
                 "Desery",
                 new[]
                 {
@@ -85,6 +88,7 @@ namespace ShoppingList.ViewModels
 
             Recipes.Add(new RecipeModel(
                 "Woda",
+                "Przyk³adowe instrukcje przygotowania wody",
                 "Napoje",
                 new[]
                 {
@@ -131,12 +135,11 @@ namespace ShoppingList.ViewModels
         }
 
         [RelayCommand]
-        private void AddCustomRecipe((string Name, string Category, IReadOnlyList<ListItemModel> Ingredients) data)
+        private void AddCustomRecipe((string Name, string Description, string Category, IReadOnlyList<ListItemModel> Ingredients) data)
         {
             string name = string.IsNullOrWhiteSpace(data.Name) ? "Bez nazwy" : data.Name;
-            string category = PresetCategories.Contains(data.Category, StringComparer.OrdinalIgnoreCase)
-                ? data.Category
-                : "Przystawki";
+            string description = string.IsNullOrWhiteSpace(data.Description) ? "Brak opisu" : data.Description;
+            string category = PresetCategories.Contains(data.Category, StringComparer.OrdinalIgnoreCase) ? data.Category : "Przystawki";
 
             List<string> categories = _shoppingListViewModel.Items
                 .Select(i => i.Category)
@@ -144,7 +147,7 @@ namespace ShoppingList.ViewModels
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            Recipes.Add(new RecipeModel(name, category, data.Ingredients));
+            Recipes.Add(new RecipeModel(name, description, category, data.Ingredients));
             Utils.ToXML(_shoppingListViewModel.Items.ToList(), categories, Recipes.ToList());
         }
     }

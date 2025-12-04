@@ -24,9 +24,9 @@ namespace ShoppingList.Views.Recipes
         {
             AddRecipePage addPage = new AddRecipePage(_viewModel)
             {
-                OnRecipeAdded = (name, category, ingredients) =>
+                OnRecipeAdded = (name, description, category, ingredients) =>
                 {
-                    var recipe = new RecipeModel(name, category, ingredients);
+                    RecipeModel recipe = new RecipeModel(name, description, category, ingredients);
                     _viewModel.Recipes.Add(recipe);
                 }
             };

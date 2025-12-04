@@ -7,7 +7,7 @@ namespace ShoppingList.Views.Recipes;
 
 public partial class AddRecipePage : ContentPage
 {
-    public Action<string, string, IReadOnlyList<ListItemModel>>? OnRecipeAdded;
+    public Action<string, string, string, IReadOnlyList<ListItemModel>>? OnRecipeAdded;
 
     private readonly RecipesViewModel? _recipesVm;
     private readonly ObservableCollection<ListItemModel> _ingredients = new();
@@ -89,6 +89,7 @@ public partial class AddRecipePage : ContentPage
     private async void OnConfirm(object sender, EventArgs e)
     {
         string recipeName = RecipeName.Text?.Trim() ?? string.Empty;
+        string recipeDescription = RecipeDescription.Text?.Trim() ?? string.Empty;
         string category = RecipeCategory.SelectedItem as string ?? "Przystawki";
         category = category == "Dania Glowne" ? "Dania G³ówne" : category;
 
@@ -103,13 +104,13 @@ public partial class AddRecipePage : ContentPage
             return;
         }
 
-        if (_recipesVm?.AddCustomRecipeCommand?.CanExecute((recipeName, category, _ingredients.ToList())) == true)
+        if (_recipesVm?.AddCustomRecipeCommand?.CanExecute((recipeName, recipeDescription, category, _ingredients.ToList())) == true)
         {
-            _recipesVm.AddCustomRecipeCommand.Execute((recipeName, category, _ingredients.ToList()));
+            _recipesVm.AddCustomRecipeCommand.Execute((recipeName, recipeDescription, category, _ingredients.ToList()));
         }
         else
         {
-            OnRecipeAdded?.Invoke(recipeName, category, _ingredients.ToList());
+            OnRecipeAdded?.Invoke(recipeName, recipeDescription, category, _ingredients.ToList());
         }
 
         await Navigation.PopModalAsync();

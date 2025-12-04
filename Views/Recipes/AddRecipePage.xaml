@@ -4,11 +4,12 @@
              x:Class="ShoppingList.Views.Recipes.AddRecipePage"
              Title="Dodaj Przepis">
   <VerticalStackLayout Padding="20" Spacing="12">
-    <Button Text="Powrot" Clicked="Return" HorizontalOptions="Start" />
+        <Button Text="Powrot" Clicked="Return" HorizontalOptions="Start" />
 
-    <Entry x:Name="RecipeName" Placeholder="Nazwa przepisu" />
+        <Entry x:Name="RecipeName" Placeholder="Nazwa przepisu" />
+        <Entry x:Name="RecipeDescription" Placeholder="Instrukcje przygotowania, opis przepisu" />
 
-    <Picker x:Name="RecipeCategory" Title="Kategoria przepisu" FontAttributes="Bold">
+        <Picker x:Name="RecipeCategory" Title="Kategoria przepisu" FontAttributes="Bold">
       <Picker.ItemsSource>
         <x:Array Type="{x:Type x:String}">
           <x:String>Przystawki</x:String>

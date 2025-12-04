@@ -17,7 +17,6 @@ public partial class RecipeView : ContentView
     public RecipeView()
     {
         InitializeComponent();
-        AddButton.Clicked += OnAddClicked;
     }
 
     private void OnAddClicked(object? sender, EventArgs e)
